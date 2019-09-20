@@ -34,7 +34,7 @@ h2 {
 .schedule {
   text-transform: uppercase;
   list-style: none;
-
+  letter-spacing: .3rem;
   font-weight: 500;
 }
 
