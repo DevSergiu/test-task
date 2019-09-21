@@ -38,16 +38,6 @@ data = [
 
 
 
-let output = '';
-data.forEach(item => {
-  output += `<li>
-              <span class="day"> ${item.day}: </span>
-              <span class="hours"> ${item.from} - ${item.to} </span>
-             </li>`;
-})
-document.getElementById('data').innerHTML = output;
-
-
 
 const groupBySchedule = scheduleArr => {
   const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -72,7 +62,20 @@ const groupBySchedule = scheduleArr => {
 }
 
 let newData = groupBySchedule(data);
-console.log(newData)
+
+
+let output = '';
+let groupedData = newData.forEach(item => {
+  item.forEach((item) => {
+
+    output += `<li>
+              <span class="day"> ${(item.day)}: </span>
+              <span class="hours"> ${item.from} - ${item.to} </span>
+             </li>`;
+
+  })
+})
+document.getElementById('data').innerHTML = output;
 
 
 
@@ -93,35 +96,3 @@ console.log(newData)
 
 
 
-
-
-
-
-
-
-
-// With For Loop
-
-// for (let i = 0; i < data.length; i++) {
-//   const day = data[i].day;
-//   const fromHour = data[i].from;
-//   const toHour = data[i].to;
-
-//   output += `<li>
-//                <span class="day"> ${day}: </span>
-//                <span class="hours"> ${fromHour} - ${toHour} </span>
-//             </li>`;
-// }
-// document.getElementById('data').innerHTML = output;
-
-
-
-////////
-// let groupBy = function (xs, key) {
-//   return xs.reduce(function (rv, x) {
-//     (rv[x[key]] = rv[x[key]] || []).push(x);
-//     return rv;
-//   }, {});
-// };
-// let newData = groupBy(data, 'from');
-// console.log(newData)
