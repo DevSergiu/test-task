@@ -39,27 +39,44 @@ let data = [
 
 
 
+/////////////////////////v1
 
-const [days, times] = data.reduce(
-  (acc, { day, from, to }) => {
+const groupBySchedule = scheduleArr => {
+  const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-    acc[0].push(`<span class="day">${day} </span>`)
-    acc[1].push(`: <span class="hours">${from} - ${to}</span><li>`)
-    return acc
-  },
-  [[], []]
-)
+  const groupedDays = []
 
-const output = [
-  ...new Set(
-    times.reduce((acc, time) => {
-      const arr = days.filter((day, i) => times[i] === time)
+  for (let i = 0; i < days.length; i++) {
+    const currentDay = days[i];
+    const previousDay = days[i - 1];
 
-      acc.push(arr.join('- ') + time)
-      return acc
-    }, [])
-  ),
-]
+    const currentSchedule = scheduleArr.find(schedule => schedule.day === currentDay);
+    const previousSchedule = scheduleArr.find(schedule => schedule.day === previousDay) || {};
+
+    if (currentSchedule.to === previousSchedule.to && currentSchedule.from === previousSchedule.from) {
+      groupedDays[groupedDays.length - 1].push(currentSchedule);
+    } else {
+      groupedDays.push([currentSchedule])
+    }
+  }
+
+  return groupedDays;
+}
+
+let newData = groupBySchedule(data);
+
+const output = newData.map(s => {
+  const start = s[0];
+  let day = start.day;
+  let hours = `${start.from} - ${start.to}`;
+
+  if (s.length > 1) {
+    const end = s[s.length - 1];
+    day = `${start.day} - ${end.day}`
+  }
+
+  return `<li><span class="day">${day}</span>: <span class="hours">${hours}</span></li>`
+}).join('')
 
 document.getElementById('data').innerHTML = output;
 
@@ -78,49 +95,54 @@ document.getElementById('data').innerHTML = output;
 
 
 
+///////////////// v2
 
-// const groupBySchedule = scheduleArr => {
-//   const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+// const [days, times] = data.reduce(
+//   (acc, { day, from, to }) => {
 
-//   const groupedDays = []
+//     acc[0].push(`<span class="day">${day} </span>`)
+//     acc[1].push(`: <span class="hours">${from} - ${to}</span><li>`)
+//     return acc
+//   },
+//   [[], []]
+// )
 
-//   for (let i = 0; i < days.length; i++) {
-//     const currentDay = days[i];
-//     const previousDay = days[i - 1];
+// const output = [
+//   ...new Set(
+//     times.reduce((acc, time) => {
+//       const arr = days.filter((day, i) => times[i] === time)
 
-//     const currentSchedule = scheduleArr.find(schedule => schedule.day === currentDay);
-//     const previousSchedule = scheduleArr.find(schedule => schedule.day === previousDay) || {};
+//       acc.push(arr.join('- ') + time)
+//       return acc
 
-//     if (currentSchedule.to === previousSchedule.to && currentSchedule.from === previousSchedule.from) {
-//       groupedDays[groupedDays.length - 1].push(currentSchedule);
-//     } else {
-//       groupedDays.push([currentSchedule])
-//     }
-//   }
+//     }, [])
+//   ),
+// ]
 
-//   return groupedDays;
-// }
-
-// let newData = groupBySchedule(data);
-
-
-
-
-
-
-
-// let output = '';
-// let groupedData = newData.forEach(item => {
-//   item.forEach((item) => {
-
-//     output += `<li>
-//               <span class="day"> ${(item.day)}: </span>
-//               <span class="hours"> ${item.from} - ${item.to} </span>
-//              </li>`;
-
-//   })
-// })
 // document.getElementById('data').innerHTML = output;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
